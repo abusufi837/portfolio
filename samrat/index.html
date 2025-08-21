@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profile Page</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f7fc;
+    }
+
+    .sidebar {
+      width: 220px;
+      background-color: #2d3e50;
+      color: white;
+      padding: 20px;
+      border-right: 2px solid #ddd;
+    }
+
+    .sidebar .nav-link {
+      font-size: 18px;
+      color: #c7d2e1;
+      padding: 10px 15px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .sidebar .nav-link:hover {
+      background-color: #007bff;
+      color: white;
+      transform: scale(1.05);
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      background-color: #ffffff;
+      padding: 10px 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+
+    .profile-pic {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 4px solid #007bff;
+      margin-right: 20px;
+      position: relative;
+    }
+
+    .profile-pic img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .header .social-icons i {
+      font-size: 22px;
+      color: #007bff;
+      margin-left: 10px;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+
+    .header .social-icons i:hover {
+      color: #0056b3;
+    }
+
+    .main-content {
+      padding: 20px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      height: 100%;
+      transition: all 0.5s ease;
+    }
+
+    .main-content h3 {
+      color: #007bff;
+      font-size: 24px;
+    }
+
+    .main-content p {
+      color: #333;
+      font-size: 16px;
+    }
+
+    .footer {
+      background-color: #007bff;
+      color: white;
+      padding: 10px;
+      text-align: center;
+      font-size: 14px;
+      margin-top: 20px;
+    }
+
+    /* Gallery and Projects section styling */
+    .gallery-container,
+    .project-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 10px;
+      height: 300px;
+      overflow-y: auto;
+      padding: 10px;
+    }
+
+    .gallery-container img,
+    .project-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    /* Project card styling */
+    .project-card {
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 10px;
+      transition: transform 0.3s ease;
+    }
+
+    .project-card:hover {
+      transform: scale(1.05);
+    }
+
+    .project-card h5 {
+      margin-top: 10px;
+      font-size: 18px;
+      color: #007bff;
+    }
+
+    .project-card p {
+      font-size: 14px;
+      color: #333;
+      margin-top: 5px;
+    }
+
+    .project-card img {
+      height: 150px;
+    }
+
+    /* Wallpapers inside home section */
+    .wallpaper-container {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 35vh;
+      /* Fixed height for consistent look */
+      overflow: hidden;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .wallpaper-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      cursor: pointer;
+      transition: transform 0.5s ease;
+    }
+
+    .wallpaper-container img:hover {
+      transform: scale(1.05);
+    }
+
+    .selected-wallpaper {
+      border: 5px solid #007bff;
+    }
+
+    .wallpaper-nav button {
+      position: absolute;
+      top: 50%;
+      z-index: 100;
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      padding: 10px;
+      font-size: 20px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .wallpaper-nav button:hover {
+      background-color: rgba(0, 0, 0, 0.7);
+    }
+
+    .wallpaper-nav button.prev {
+      left: 10px;
+    }
+
+    .wallpaper-nav button.next {
+      right: 10px;
+    }
+    .section-title {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #2c3e50;
+  animation: fadeInDown 1s ease;
+}
+
+.achievements-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.achievement-card {
+  background: #f8f9fa;
+  padding: 15px 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  animation: fadeInUp 1s ease forwards;
+  opacity: 0;
+}
+
+.achievement-card:nth-child(1) {
+  animation-delay: 0.2s;
+}
+.achievement-card:nth-child(2) {
+  animation-delay: 0.4s;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.profile-info {
+  background: #f8f9fa;
+  padding: 15px 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  animation: fadeInUp 1s ease forwards;
+  opacity: 0;
+}
+
+.profile-info p {
+  margin: 10px 0;
+  font-size: 16px;
+  color: #34495e;
+}
+
+.profile-info i {
+  color: #2c3e50;
+  margin-right: 8px;
+}
+
+.section-title {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #2c3e50;
+  animation: fadeInDown 1s ease;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+  
+  </style>
+  <link rel="shortcut icon" type="image/x-icon" href="tu.ico">
+</head>
+
+<body>
+
+  <div class="container-fluid">
+    <!-- Header Section -->
+    <div class="row header">
+      <div class="profile-pic">
+        <img src="img/cv_1.jpg" alt="Profile Picture"> <!-- Replace with your actual image -->
+      </div>
+      <div class="flex-grow-1 d-flex justify-content-start align-items-center">
+        <div class="profile-name" style="font-size: 24px; font-weight: bold; color: #333; margin-left: 20px;">
+          Abusufiyan Sekh<!-- Replace with your actual name -->
+        </div>
+      </div>
+      <div class="flex-grow-1 d-flex justify-content-end">
+        <div class="social-icons">
+         <a href="https://www.facebook.com/profile.php?id=100061059126440"> <i class="fab fa-facebook"></i></a>
+          <a href="https://www.shutterstock.com/image-vector/middle-finger-emoji-illustration-face-stuckout-781913023"><i class="fab fa-instagram"></i></a>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="row">
+      <!-- Sidebar Navigation -->
+      <div class="col-md-3 col-12 sidebar">
+        <ul class="nav flex-column">
+          <li class="nav-item"><a href="#" class="nav-link" onclick="showContent('home')">Home</a></li>
+          <li class="nav-item"><a href="#" class="nav-link" onclick="showContent('profile')">Profile</a></li>
+          <li class="nav-item"><a href="#" class="nav-link" onclick="showContent('project')">Projects</a></li>
+          <li class="nav-item"><a href="#" class="nav-link" onclick="showContent('gallery')">Gallery</a></li>
+          <li class="nav-item"><a href="#" class="nav-link" onclick="showContent('achievement')">Achievements</a></li>
+          <li class="nav-item"><a href="#" class="nav-link" onclick="showContent('contact')">Contact</a></li>
+        </ul>
+      </div>
+
+      <!-- Content Area -->
+      <div class="col-md-9 col-12">
+        <div id="content-box" class="main-content">
+          <!-- Dynamic content will be loaded here -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Section -->
+    <div class="footer">
+      <p>&copy; 2025 Your Name. All rights reserved.</p>
+    </div>
+  </div>
+
+  <script>
+    const contents = {
+      home: ` 
+        <h3>Welcome to the Home Page!</h3>
+        <p>Welcome to my portfolio. Here you'll find more about me, my work, and my achievements.</p>
+        <div class="wallpaper-container">
+          <img src="img/a.jpg" alt="Wallpaper 1" id="wallpaper">
+          <div class="wallpaper-nav">
+            <button class="prev" onclick="changeWallpaper('prev')"><i class="fas fa-chevron-left"></i></button>
+            <button class="next" onclick="changeWallpaper('next')"><i class="fas fa-chevron-right"></i></button>
+          </div>
+        </div>
+      `,
+profile: `
+  <h3 class="section-title"><i class="fas fa-user"></i> About Me</h3>
+  <div class="profile-info">
+    <p><i class="fas fa-id-card"></i> <strong>Name:</strong> Abusufiyan Sekh</p>
+    <p><i class="fas fa-map-marker-alt"></i> <strong>Address:</strong> Nadia, West Bengal, India</p>
+    <p><i class="fas fa-university"></i> <strong>Education:</strong> Pursuing a Bachelor of Computer Applications (BCA) at Brainware University</p>
+    <p><i class="fas fa-quote-left"></i> Always curious, always learning — that’s my motto! <i class="fas fa-quote-right"></i></p>
+  </div>
+`,
+
+      project: `<h3>Projects</h3>
+        <div class="project-container">
+          <div class="project-card">
+            <a href="https://bwu473.netlify.app/"><img src="img/Screenshot (8).png" class="card-img" alt="Project 1"></a>
+            <h5>Project One</h5>
+            <p>Description of project one. Brief overview of technologies used or purpose.</p>
+          </div>
+          <div class="project-card">
+            <a href="https://suficafe.netlify.app/"><img src="img/Screenshot (10).png" class="card-img" alt="Project 4"></a>
+            <h5>Project Two</h5>
+            <p>Details about project four. Responsive design, backend integration, etc.</p>
+          </div>
+        </div>`,
+      gallery: `<h3>Gallery</h3><div class="gallery-container">
+                <img src="img/1.jpg" alt="Image 1">
+                <img src="img/2.jpg" alt="Image 2">
+                <img src="img/3.jpg" alt="Image 3">
+                <img src="img/4.jpg" alt="Image 4">
+                <img src="img/5.jpg" alt="Image 5">
+                <img src="img/6.jpg" alt="Image 6">
+                <img src="img/7.jpg" alt="Image 7">
+                <img src="img/8.jpg" alt="Image 8">
+                <img src="img/9.jpg" alt="Image 9">
+                <img src="img/10.jpg" alt="Image 10">
+                <img src="img/11.jpg" alt="Image 11">
+                <img src="img/12.jpg" alt="Image 12">
+                <img src="img/13.jpg" alt="Image 13">
+                <img src="img/14.jpg" alt="Image 14">
+                <img src="img/15.jpg" alt="Image 15">
+                 <img src="img/16.jpg" alt="Image 16">
+                  <img src="img/17.jpg" alt="Image 17">
+                   <img src="img/18.jpg" alt="Image 18">
+                    <img src="img/19.jpg" alt="Image 19">
+                     <img src="img/20.jpg" alt="Image 20">
+                      <img src="img/21.jpg" alt="Image 21">
+                       <img src="img/22.jpg" alt="Image 22">
+                        <img src="img/23.jpg" alt="Image 23">
+                         <img src="img/24.jpg" alt="Image 24">
+                          <img src="img/25.jpg" alt="Image 25">
+                           <img src="img/26.jpg" alt="Image 26">
+                            <img src="img/27.jpg" alt="Image 27">
+                             <img src="img/28.jpg" alt="Image 28">
+                              <img src="img/29.jpg" alt="Image 29">
+                               <img src="img/30.jpg" alt="Image 30">
+                                   <img src="img/31.jpg" alt="Image 31">
+                                       <img src="img/32.jpg" alt="Image 32">
+                                           <img src="img/33.jpg" alt="Image 33">
+                      
+              </div>`,
+achievement: `
+  <h3 class="section-title">Achievements</h3>
+  <div class="achievements-container">
+    <div class="achievement-card">
+      <h4>🎓 Academic Excellence</h4>
+      <p>I stood second in ADCA within the Nakashipara police station area.</p>
+    </div>
+    <div class="achievement-card">
+      <h4>🏆 Typing Competition</h4>
+      <p>I secured first place in the typing competition within the Nakashipara police station area.</p>
+    </div>
+  </div>
+`,
+contact: `
+  <h3 class="section-title"><i class="fas fa-envelope"></i> Contact Me</h3>
+  <form action="https://formspree.io/f/mwporvda" method="POST" class="contact-form">
+    <div class="mb-3">
+      <label for="name" class="form-label"><i class="fas fa-user"></i> Name</label>
+      <input type="text" class="form-control" id="name" name="name" placeholder="Your full name" required>
+    </div>
+    <div class="mb-3">
+      <label for="email" class="form-label"><i class="fas fa-envelope-open-text"></i> Email</label>
+      <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com" required>
+    </div>
+    <div class="mb-3">
+      <label for="message" class="form-label"><i class="fas fa-comment-dots"></i> Message</label>
+      <textarea class="form-control" id="message" name="message" rows="3" placeholder="Type your message here..." required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Send Message</button>
+  </form>
+`,
+
+
+    
+    };
+
+    let wallpapers = [
+      "img/a.jpg",
+      "img/b.jpg",
+        "img/c.jpg",
+          "img/d.jpg",
+           "img/e.jpg",
+            "img/f.jpg",
+             "img/g.jpg",
+              "img/h.jpg"
+               
+     
+    ];
+    let currentWallpaperIndex = 0;
+
+    function changeWallpaper(direction) {
+      if (direction === 'next') {
+        currentWallpaperIndex = (currentWallpaperIndex + 1) % wallpapers.length;
+      } else {
+        currentWallpaperIndex = (currentWallpaperIndex - 1 + wallpapers.length) % wallpapers.length;
+      }
+      document.getElementById("wallpaper").src = wallpapers[currentWallpaperIndex];
+    }
+
+    function showContent(section) {
+      document.getElementById("content-box").innerHTML = contents[section];
+    }
+
+    // Default content load
+    window.onload = () => {
+      showContent('home');
+    };
+  </script>
+</body>
+
+</html>
